@@ -15,15 +15,17 @@ class Routes extends HttpInboundSyncFilter {
     @Override
     HttpRequestMessage apply(HttpRequestMessage request) {
         SessionContext context = request.getContext()
-        switch (request.getPath()) {
-            case "/some-service-1":
+        switch (request.getInboundRequest().getQueryParams().get("src").get( 0 )) {
+            case "books":
                 context.setEndpoint(ZuulEndPointRunner.PROXY_ENDPOINT_FILTER_NAME)
                 context.setRouteVIP("some-service-1")
+				request.setPath("/books");
                 break
 
-            case "/some-service-2":
+            case "snacks":
                 context.setEndpoint(ZuulEndPointRunner.PROXY_ENDPOINT_FILTER_NAME)
                 context.setRouteVIP("some-service-2")
+				request.setPath("/snacks");
                 break
 
             default:
